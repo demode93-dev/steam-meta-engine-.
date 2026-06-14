@@ -1,0 +1,47 @@
+import { GoogleGenAI, Type } from "@google/genai";
+import steamMetaRules from "./steam_meta_rules.json" with { type: "json" }; 
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+const headers = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+export async function handler(event) {
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 200, headers, body: "" };
+  }
+
+  try {
+    const { title, mechanics, theme, inspirations } = JSON.parse(event.body);
+    const prompt = `Title: ${title}\nMechanics: ${mechanics}\nTheme: ${theme}\nInspirations: ${inspirations}`;
+
+    const systemPrompt = `
+      You are an expert Steam Store conversion optimizer. 
+      You MUST obey the following proprietary meta-rules when generating output:
+      ${JSON.stringify(steamMetaRules)}
+    `;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-1.5-flash",
+      contents: prompt,
+      config: {
+        systemInstruction: systemPrompt,
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            mechanic_heavy: {
+              type: Type.OBJECT,
+              properties: {
+                short_description: { type: Type.STRING },
+                top_5_tags: { type: Type.ARRAY, items: { type: Type.STRING } }
+              },
+              required: ["short_description", "top_5_tags"]
+            },
+            narrative_atmosphere: {
+              type: Type.OBJECT,
+              properties: {
+                short_description: { type: Type.STRING },
+                top_5_tags: {
