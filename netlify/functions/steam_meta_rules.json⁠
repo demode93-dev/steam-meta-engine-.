@@ -1,0 +1,39 @@
+{
+  "steam_meta_rules": {
+    "global_constraints": {
+      "banned_top_5_tags": [
+        "Indie", 
+        "Singleplayer", 
+        "2D", 
+        "3D", 
+        "Action", 
+        "Adventure"
+      ],
+      "reasoning": "These tags are too broad and actively harm Steam's 'More Like This' recommendation algorithm. The top 5 tags must strictly define the niche."
+    },
+    "description_syntax": {
+      "max_characters": 300,
+      "formula": "[High-Stakes Context] + [Core Gameplay Verb] + [Ultimate Goal/Hook]",
+      "banned_words": ["Experience", "Journey", "Beautiful", "Unique", "Immersive"],
+      "rule": "Every adjective must be earned. Instead of 'scary enemies', describe the specific threat."
+    },
+    "genre_weighting_matrix": {
+      "roguelite_or_survival": {
+        "priority_tags": ["Perma-Death", "Resource Management", "Procedural Generation", "Difficult"],
+        "example_input": "A game where you escape a quarantined research facility.",
+        "example_output_tags": ["Survival Horror", "Resource Management", "Outbreak Sim", "Base Defense", "Perma-Death"]
+      },
+      "cozy_or_management": {
+        "priority_tags": ["Life Sim", "Base Building", "Relaxing", "Agriculture"],
+        "example_input": "Farming in space.",
+        "example_output_tags": ["Farming Sim", "Space", "Base Building", "Management", "Relaxing"]
+      }
+    },
+    "output_requirements": {
+      "format": "Generate THREE distinct archetypes.",
+      "archetype_1": "Mechanic-Heavy (Focus purely on game loops, e.g., crafting, shooting, managing)",
+      "archetype_2": "Narrative/Atmosphere (Focus on the threat, the setting, and the mystery)",
+      "archetype_3": "The Novelty Hook (Focus on the weirdest, most unique intersection of genres in the game)"
+    }
+  }
+}
